@@ -1,14 +1,24 @@
 import os
 
-files = {
-"app/src/main/java/com/tai1233444/MainActivity.java": """package com.tai1233444;
+def w(path, content):
+    d = os.path.dirname(path)
+    if d:
+        os.makedirs(d, exist_ok=True)
+    with open(path, 'w') as f:
+        f.write(content)
+    print(f"Created: {path}")
+
+w("app/src/main/java/com/tai1233444/MainActivity.java", """package com.tai1233444;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.widget.FrameLayout;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.camera.core.*;
+import androidx.camera.core.CameraSelector;
+import androidx.camera.core.ImageAnalysis;
+import androidx.camera.core.ImageProxy;
+import androidx.camera.core.Preview;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
 import androidx.core.app.ActivityCompat;
@@ -103,9 +113,9 @@ public class MainActivity extends AppCompatActivity {
         if (code==PERMISSION_CODE && r.length>0 && r[0]==PackageManager.PERMISSION_GRANTED) startCamera();
     }
     @Override protected void onDestroy() { super.onDestroy(); cameraExecutor.shutdown(); }
-}""",
+}""")
 
-"app/src/main/java/com/tai1233444/CursorView.java": """package com.tai1233444;
+w("app/src/main/java/com/tai1233444/CursorView.java", """package com.tai1233444;
 import android.content.Context;
 import android.graphics.*;
 import android.view.View;
@@ -140,9 +150,9 @@ public class CursorView extends View {
         canvas.drawCircle(cursorX,cursorY,36,ringPaint);
         canvas.drawCircle(cursorX,cursorY,5,dotPaint);
     }
-}""",
+}""")
 
-"app/src/main/AndroidManifest.xml": """<?xml version="1.0" encoding="utf-8"?>
+w("app/src/main/AndroidManifest.xml", """<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.tai1233444">
     <uses-sdk android:minSdkVersion="24" android:targetSdkVersion="33"/>
@@ -158,12 +168,12 @@ public class CursorView extends View {
             </intent-filter>
         </activity>
     </application>
-</manifest>""",
+</manifest>""")
 
-"app/src/main/res/values/strings.xml": """<?xml version="1.0" encoding="utf-8"?>
-<resources><string name="app_name">Hand Gesture</string></resources>""",
+w("app/src/main/res/values/strings.xml", """<?xml version="1.0" encoding="utf-8"?>
+<resources><string name="app_name">Hand Gesture</string></resources>""")
 
-"app/src/main/res/values/themes.xml": """<?xml version="1.0" encoding="utf-8"?>
+w("app/src/main/res/values/themes.xml", """<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="Theme.HandGesture" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">#000000</item>
@@ -171,9 +181,9 @@ public class CursorView extends View {
         <item name="colorAccent">#00FFFF</item>
         <item name="android:windowBackground">#000000</item>
     </style>
-</resources>""",
+</resources>""")
 
-"app/build.gradle": """plugins { id 'com.android.application' }
+w("app/build.gradle", """plugins { id 'com.android.application' }
 android {
     compileSdk 33
     defaultConfig {
@@ -197,33 +207,28 @@ dependencies {
     implementation 'androidx.camera:camera-lifecycle:1.3.1'
     implementation 'androidx.camera:camera-view:1.3.1'
     implementation 'com.google.guava:guava:31.0.1-android'
-}""",
+}""")
 
-"build.gradle": """buildscript {
+w("build.gradle", """buildscript {
     repositories { google(); mavenCentral() }
     dependencies { classpath 'com.android.tools.build:gradle:7.4.2' }
 }
-allprojects { repositories { google(); mavenCentral() } }""",
+allprojects { repositories { google(); mavenCentral() } }""")
 
-"settings.gradle": """pluginManagement { repositories { google(); mavenCentral(); gradlePluginPortal() } }
+w("settings.gradle", """pluginManagement {
+    repositories { google(); mavenCentral(); gradlePluginPortal() }
+}
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories { google(); mavenCentral() }
 }
 rootProject.name = "HandGesture"
-include ':app'""",
+include ':app'""")
 
-"gradle/wrapper/gradle-wrapper.properties": """distributionBase=GRADLE_USER_HOME
+w("gradle/wrapper/gradle-wrapper.properties", """distributionBase=GRADLE_USER_HOME
 distributionPath=wrapper/dists
 distributionUrl=https\\://services.gradle.org/distributions/gradle-7.5-bin.zip
 zipStoreBase=GRADLE_USER_HOME
-zipStorePath=wrapper/dists""",
-}
+zipStorePath=wrapper/dists""")
 
-for path, content in files.items():
-    os.makedirs(os.path.dirname(path), exist_ok=True)
-    with open(path, 'w') as f:
-        f.write(content)
-    print(f"Created: {path}")
-
-print("ALL FILES CREATED!")
+print("ALL DONE!")
